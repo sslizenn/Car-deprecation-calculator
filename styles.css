@@ -1,0 +1,372 @@
+:root {
+  --primary-color: #3498db;
+  --primary-dark: #2980b9;
+  --secondary-color: #e67e22;
+  --secondary-dark: #d35400;
+  --text-color: #333;
+  --light-gray: #f8f9fa;
+  --medium-gray: #e9ecef;
+  --border-color: #dee2e6;
+  --success-color: #2ecc71;
+  --danger-color: #e74c3c;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Roboto', Arial, sans-serif;
+  line-height: 1.6;
+  color: var(--text-color);
+  background-color: #f5f7fa;
+  padding: 20px;
+}
+
+.page-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+}
+
+.page-header {
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+  color: white;
+  padding: 30px;
+  text-align: center;
+}
+
+.page-header h1 {
+  font-size: 28px;
+  margin-bottom: 10px;
+}
+
+.page-header p {
+  font-size: 16px;
+  max-width: 800px;
+  margin: 0 auto;
+  opacity: 0.9;
+}
+
+.main-content {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 30px;
+  gap: 30px;
+}
+
+.calculator-section,
+.results-section,
+.example-section,
+.form-section {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  padding: 25px;
+  flex: 1 1 400px;
+}
+
+.calculator-section {
+  border-top: 4px solid var(--primary-color);
+}
+
+.form-section {
+  border-top: 4px solid var(--secondary-color);
+}
+
+h2 {
+  color: var(--text-color);
+  font-size: 22px;
+  margin-bottom: 20px;
+  text-align: center;
+  position: relative;
+  padding-bottom: 10px;
+}
+
+h2:after {
+  content: '';
+  position: absolute;
+  width: 60px;
+  height: 3px;
+  background: var(--primary-color);
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.form-section h2:after {
+  background: var(--secondary-color);
+}
+
+label {
+  display: block;
+  font-weight: 500;
+  margin-bottom: 6px;
+  color: #555;
+}
+
+.input-group {
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.input-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #aaa;
+  width: 20px;
+  height: 20px;
+  pointer-events: none;
+}
+
+input,
+select,
+textarea {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  font-size: 15px;
+  transition: all 0.3s;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--primary-color);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+}
+
+.form-section input:focus,
+.form-section select:focus,
+.form-section textarea:focus {
+  border-color: var(--secondary-color);
+  box-shadow: 0 0 0 3px rgba(230, 126, 34, 0.2);
+}
+
+.has-icon input,
+.has-icon select {
+  padding-left: 40px;
+}
+
+button {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn-secondary {
+  background-color: var(--secondary-color);
+  color: white;
+}
+
+.btn-secondary:hover {
+  background-color: var(--secondary-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.results-container {
+  background-color: var(--light-gray);
+  border-radius: 6px;
+  padding: 20px;
+  margin-top: 20px;
+  opacity: 0.7;
+  transition: all 0.5s;
+}
+
+.results-container.active {
+  opacity: 1;
+  border-left: 3px solid var(--primary-color);
+}
+
+.results-title {
+  font-weight: 500;
+  margin-bottom: 15px;
+  text-align: center;
+  font-size: 18px;
+}
+
+.result-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.result-item:last-child {
+  border-bottom: none;
+}
+
+.result-label {
+  font-weight: 500;
+}
+
+.result-value {
+  font-weight: 700;
+  transition: all 0.3s;
+}
+
+.calculation-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.calculation-table th,
+.calculation-table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.calculation-table th {
+  background-color: var(--light-gray);
+  font-weight: 500;
+}
+
+.calculation-table tr:hover {
+  background-color: var(--light-gray);
+}
+
+.depreciation-chart {
+  width: 100%;
+  height: 200px;
+  margin-top: 20px;
+  background-color: var(--light-gray);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.form-response {
+  text-align: center;
+  padding: 15px;
+  margin-top: 20px;
+  border-radius: 6px;
+  display: none;
+}
+
+.form-response.success {
+  display: block;
+  background-color: rgba(46, 204, 113, 0.2);
+  color: var(--success-color);
+  border: 1px solid var(--success-color);
+}
+
+.error-message {
+  color: var(--danger-color);
+  font-size: 14px;
+  margin-top: 5px;
+  display: none;
+}
+
+.input-error {
+  border-color: var(--danger-color) !important;
+}
+
+.highlight-row {
+  background-color: rgba(52, 152, 219, 0.1);
+  font-weight: 500;
+}
+
+.empty-message {
+  text-align: center;
+  color: #aaa;
+  padding: 30px 0;
+}
+
+.chart-placeholder {
+  text-align: center;
+  padding: 80px 0;
+  color: #aaa;
+  font-size: 14px;
+}
+
+/* графік */
+.chart-section {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  padding: 25px;
+  flex: 1 1 400px;
+}
+
+/* текст на графіку */
+.depreciation-chart svg text {
+  font-family: 'Roboto', Arial, sans-serif;
+  font-size: 11px !important;
+}
+/* елементи графіка */
+.depreciation-chart svg {
+  overflow: visible;
+}
+
+/* адаптив для планшетів */
+@media (max-width: 768px) {
+  .main-content {
+    flex-direction: column;
+  }
+
+  .calculator-section,
+  .results-section,
+  .example-section,
+  .form-section {
+    flex: 1 1 100%;
+  }
+
+  .calculation-table {
+    font-size: 14px;
+  }
+
+  .calculation-table th,
+  .calculation-table td {
+    padding: 8px;
+  }
+
+  .page-header {
+    padding: 20px;
+  }
+}
+/* адаптив для мобільних */
+@media (max-width: 480px) {
+  .calculation-table {
+    font-size: 12px;
+  }
+
+  .calculation-table th,
+  .calculation-table td {
+    padding: 6px 4px;
+  }
+
+  h2 {
+    font-size: 18px;
+  }
+
+  .page-header h1 {
+    font-size: 24px;
+  }
+}
