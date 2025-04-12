@@ -2,15 +2,14 @@ document.addEventListener("DOMContentLoaded", function () {
     // Ініціалізація змінних - отримання посилань на елементи DOM
     const carBrandSelect = document.getElementById("brand");                  // Селект для вибору марки авто
     const carModelSelect = document.getElementById("model");                   // Селект для вибору моделі авто
-    const yearInput = document.getElementById("year");                         // Поле для введення року випуску
-    const mileageInput = document.getElementById("mileage");                   // Поле для введення пробігу
-    const initialPriceInput = document.getElementById("initialPrice");         // Поле для введення початкової вартості
+    const purchaseYearInput = document.getElementById("purchaseYear");         // Поле для введення року придбання
+    const purchasePriceInput = document.getElementById("purchasePrice");       // Поле для введення ціни придбання
+    const depreciationPeriodInput = document.getElementById("depreciationPeriod"); // Поле для періоду амортизації (в роках)
     const calculateBtn = document.getElementById("calculate");                 // Кнопка розрахунку
     const resultsContainer = document.getElementById("results");               // Контейнер для результатів
     const currentValueSpan = document.getElementById("currentValue");          // Елемент для виведення поточної вартості
     const totalDepreciationSpan = document.getElementById("totalDepreciation"); // Елемент для виведення загальної амортизації
     const yearlyDepreciationSpan = document.getElementById("yearlyDepreciation"); // Елемент для виведення річної амортизації
-    const costPerKmSpan = document.getElementById("costPerKm");                // Елемент для виведення вартості на км
     const depreciationChart = document.getElementById("depreciationChart");    // Елемент для графіка амортизації
     const resetBtn = document.getElementById("reset");                         // Кнопка скидання
 
@@ -62,6 +61,7 @@ document.addEventListener("DOMContentLoaded", function () {
         "Toyota": ["4Runner", "Camry", "Corolla", "Highlander", "Land Cruiser", "RAV4", "Tacoma", "Prius", "Sienna", "Avalon", "Yaris", "Sequoia", "Venza", "C-HR", "Supra", "Tundra", "86", "Crown", "bZ4X", "Mirai", "Solara", "Matrix", "Echo", "FJ Cruiser", "MR2"],
         "Volkswagen": ["Atlas", "Golf", "ID.4", "Jetta", "Passat", "Tiguan", "Arteon", "Polo", "T-Roc", "Touareg", "ID.3", "Taos", "T-Cross", "Caddy", "Sharan", "Transporter", "Touran", "Beetle", "Phaeton", "CC", "Scirocco", "EOS", "ID.Buzz", "ID.5", "ID.6"],
         "Volvo": ["S60", "S90", "V60", "XC40", "XC60", "XC90", "C40 Recharge", "V90", "V40", "S40", "C30", "C70", "S70", "V70", "S80", "XC70", "240", "850", "940", "960"]
+
     };
 
     // Функція для заповнення випадаючого списку марок автомобілів
@@ -111,22 +111,22 @@ document.addEventListener("DOMContentLoaded", function () {
             isValid = false; // Форма невалідна
         }
 
-        // Перевіряємо рік випуску (має бути між 1990 і поточним роком)
+        // Перевіряємо рік придбання (має бути між 1990 і поточним роком)
         const currentYear = new Date().getFullYear(); // Отримуємо поточний рік
-        if (!yearInput.value || yearInput.value < 1990 || yearInput.value > currentYear) {
-            document.getElementById("year-error").style.display = "block"; // Показуємо повідомлення про помилку
+        if (!purchaseYearInput.value || purchaseYearInput.value < 1990 || purchaseYearInput.value > currentYear) {
+            document.getElementById("purchaseYear-error").style.display = "block"; // Показуємо повідомлення про помилку
             isValid = false; // Форма невалідна
         }
 
-        // Перевіряємо пробіг (має бути більше 0)
-        if (!mileageInput.value || mileageInput.value < 0) {
-            document.getElementById("mileage-error").style.display = "block"; // Показуємо повідомлення про помилку
+        // Перевіряємо ціну придбання (має бути більше 0)
+        if (!purchasePriceInput.value || purchasePriceInput.value <= 0) {
+            document.getElementById("purchasePrice-error").style.display = "block"; // Показуємо повідомлення про помилку
             isValid = false; // Форма невалідна
         }
 
-        // Перевіряємо початкову вартість (має бути більше 0)
-        if (!initialPriceInput.value || initialPriceInput.value <= 0) {
-            document.getElementById("initialPrice-error").style.display = "block"; // Показуємо повідомлення про помилку
+        // Перевіряємо період амортизації (має бути більше 0)
+        if (!depreciationPeriodInput.value || depreciationPeriodInput.value <= 0) {
+            document.getElementById("depreciationPeriod-error").style.display = "block"; // Показуємо повідомлення про помилку
             isValid = false; // Форма невалідна
         }
 
@@ -138,11 +138,11 @@ document.addEventListener("DOMContentLoaded", function () {
         // Отримуємо введені користувачем дані
         const brand = carBrandSelect.value;                   // Марка автомобіля
         const model = carModelSelect.value;                   // Модель автомобіля
-        const year = parseInt(yearInput.value);               // Рік випуску
-        const mileage = parseInt(mileageInput.value);         // Пробіг в км
-        const initialPrice = parseFloat(initialPriceInput.value); // Початкова вартість
+        const purchaseYear = parseInt(purchaseYearInput.value);   // Рік придбання
+        const purchasePrice = parseFloat(purchasePriceInput.value); // Ціна придбання
+        const depreciationPeriod = parseInt(depreciationPeriodInput.value); // Період амортизації в роках
         const currentYear = new Date().getFullYear();         // Поточний рік
-        const age = currentYear - year;                       // Вік автомобіля в роках
+        const yearsOwned = Math.min(depreciationPeriod, currentYear - purchaseYear); // Кількість років володіння або період амортизації, що менше
 
         // Різні марки мають різні коефіцієнти амортизації
         // Чим більше число, тим швидше авто втрачає вартість
@@ -189,105 +189,61 @@ document.addEventListener("DOMContentLoaded", function () {
             "Volvo": 0.57
         };
 
-        // Визначаємо люксові марки, які мають більш сувору амортизацію після 10+ років
+        // Визначаємо люксові марки
         const luxuryBrands = ["Audi", "BMW", "Bentley", "Jaguar", "Land Rover", "Lexus", "Maserati", "Mercedes-Benz", "Porsche", "Aston Martin"];
         const isLuxury = luxuryBrands.includes(brand); // Перевіряємо, чи є марка люксовою
 
         // Отримуємо коефіцієнт амортизації для марки або використовуємо значення за замовчуванням
-        const brandDepreciationRate = brandDepreciationRates[brand] || 0.55;
+        const brandRate = brandDepreciationRates[brand] || 0.55;
 
-        // Розрахунок коефіцієнта віку (амортизація за віком)
-        // Чим старіше авто, тим менше його вартість
-        const ageFactor = Math.max(0.10, Math.pow(0.60, age));
+        // ВИПРАВЛЕНО: Модифікований коефіцієнт амортизації для більш реалістичних значень
+        let yearlyDepreciationRate;
 
-        // Розрахунок коефіцієнта пробігу
-        const averageYearlyMileage = 15000; // Середній річний пробіг у км
-        const expectedMileage = age * averageYearlyMileage; // Очікуваний пробіг для даного віку
-        const mileageRatio = mileage / Math.max(1, expectedMileage); // Відношення фактичного пробігу до очікуваного
-
-        // Автомобілі з великим пробігом втрачають більше вартості
-        const mileageFactor = Math.max(0.25, Math.pow(0.80, (mileageRatio - 1) * 20));
-
-        // Розрахунок базового коефіцієнта амортизації
-        const baseDepreciation = brandDepreciationRate + 0.25;
-        let depreciationRate = Math.max(0.1, Math.min(0.9, 1 - (baseDepreciation * (1 - ageFactor) * (1 - mileageFactor))));
-
-        // Застосовуємо діапазони віку з різними рівнями амортизації
-        let finalDepreciationRate = depreciationRate;
-
-        // Сувора амортизація для старіших автомобілів
-        if (age > 3 && age <= 7) {
-            // 3-7 років: значне зниження
-            finalDepreciationRate = depreciationRate * (0.80 - (age - 3) * 0.05);
-        } else if (age > 7 && age <= 12) {
-            // 7-12 років: ще більше зниження
-            finalDepreciationRate = depreciationRate * (0.60 - (age - 7) * 0.06);
-        } else if (age > 12) {
-            // 12+ років: дуже низька залишкова вартість
-            finalDepreciationRate = depreciationRate * (0.30 - (age - 12) * 0.02);
+        if (isLuxury) {
+            // Люксові авто мають скориговану швидкість амортизації
+            yearlyDepreciationRate = 0.92 - (brandRate * 0.08);
+        } else {
+            // Звичайні авто мають повільнішу амортизацію
+            yearlyDepreciationRate = 0.94 - (brandRate * 0.06);
         }
 
-        // Додатковий штраф для люксових марок після 10 років
-        if (isLuxury && age > 10) {
-            finalDepreciationRate *= 0.6 - (age - 10) * 0.03;
-        }
-
-        // Забезпечуємо мінімальну вартість (10% для звичайних, 7% для люксових)
-        const minValue = isLuxury ? 0.07 : 0.10;
-        finalDepreciationRate = Math.max(minValue, finalDepreciationRate);
-
-        // Розрахунок поточної вартості з використанням фінального коефіцієнта
-        const currentValue = initialPrice * finalDepreciationRate;
+        // Розрахунок поточної вартості з використанням складної амортизації
+        // Формула: purchasePrice * (yearlyDepreciationRate ^ yearsOwned)
+        const currentValue = purchasePrice * Math.pow(yearlyDepreciationRate, yearsOwned);
 
         // Розрахунок загальної амортизації
-        const totalDepreciation = initialPrice - currentValue;
+        const totalDepreciation = purchasePrice - currentValue;
 
         // Розрахунок річної амортизації
-        const yearlyDepreciation = totalDepreciation / Math.max(1, age);
-
-        // Розрахунок вартості на км
-        const costPerKm = totalDepreciation / Math.max(1, mileage);
+        const yearlyDepreciation = totalDepreciation / Math.max(1, yearsOwned);
 
         // Повертаємо результати розрахунків
         return {
             currentValue,             // Поточна вартість
             totalDepreciation,        // Загальна амортизація
             yearlyDepreciation,       // Річна амортизація
-            costPerKm,                // Вартість на км
-            depreciationRate: finalDepreciationRate // Фінальний коефіцієнт амортизації
+            yearlyDepreciationRate,   // Річний коефіцієнт амортизації
+            purchasePrice,            // Ціна придбання
+            yearsOwned                // Роки володіння
         };
     }
 
     // Функція для генерації графіка амортизації
-    function generateDepreciationChart(initialPrice, depreciationRate) {
+    function generateDepreciationChart(results) {
         // Видаляємо існуючий вміст графіка
         depreciationChart.innerHTML = '';
 
-        const currentYear = new Date().getFullYear();          // Поточний рік
-        const purchaseYear = parseInt(yearInput.value);        // Рік придбання
-        const yearsPassed = currentYear - purchaseYear;        // Скільки років минуло з моменту придбання
+        const purchaseYear = parseInt(purchaseYearInput.value);   // Рік придбання
+        const depreciationPeriod = parseInt(depreciationPeriodInput.value); // Період амортизації в роках
         const valueTrend = [];                                // Масив для зберігання динаміки вартості
 
-        // Розраховуємо річний коефіцієнт амортизації, який дасть фінальний результат
-        // Це забезпечує плавну криву, а не різке падіння
-        const yearlyRate = Math.pow(depreciationRate, 1 / Math.max(1, yearsPassed));
+        // Додаємо початкову точку (ціна придбання)
+        valueTrend.push({ year: purchaseYear, value: results.purchasePrice });
 
-        // Розраховуємо вартість для минулих років
-        for (let i = 0; i <= yearsPassed; i++) {
-            if (i === 0) {
-                // Початкова вартість при придбанні
-                valueTrend.push({ year: purchaseYear, value: initialPrice });
-            } else {
-                // Застосовуємо складну амортизацію на основі річного коефіцієнта
-                const value = initialPrice * Math.pow(yearlyRate, i);
-                valueTrend.push({ year: purchaseYear + i, value: value });
-            }
-        }
-
-        // Прогнозуємо ще 5 років у майбутнє
-        for (let i = 1; i <= 5; i++) {
-            const value = initialPrice * Math.pow(yearlyRate, yearsPassed + i);
-            valueTrend.push({ year: currentYear + i, value: value });
+        // Розраховуємо вартість для кожного року в періоді амортизації
+        for (let i = 1; i <= depreciationPeriod; i++) {
+            const value = results.purchasePrice * Math.pow(results.yearlyDepreciationRate, i);
+            valueTrend.push({ year: purchaseYear + i, value: value });
         }
 
         // Створюємо SVG графік з відступами
@@ -351,6 +307,31 @@ document.addEventListener("DOMContentLoaded", function () {
             tooltip.textContent = `${point.year}: $${Math.round(point.value).toLocaleString()}`;
             circle.appendChild(tooltip);
         });
+
+        // Додаємо поточний рік як вертикальну лінію (якщо він у межах періоду)
+        const currentYear = new Date().getFullYear();
+        if (currentYear >= purchaseYear && currentYear <= purchaseYear + depreciationPeriod) {
+            const currentX = xScale(currentYear);
+
+            const currentYearLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
+            currentYearLine.setAttribute("x1", currentX);
+            currentYearLine.setAttribute("y1", "0");
+            currentYearLine.setAttribute("x2", currentX);
+            currentYearLine.setAttribute("y2", height);
+            currentYearLine.setAttribute("stroke", "#e74c3c");
+            currentYearLine.setAttribute("stroke-width", "1.5");
+            currentYearLine.setAttribute("stroke-dasharray", "5,5");
+            g.appendChild(currentYearLine);
+
+            const currentYearLabel = document.createElementNS("http://www.w3.org/2000/svg", "text");
+            currentYearLabel.setAttribute("x", currentX);
+            currentYearLabel.setAttribute("y", "0");
+            currentYearLabel.setAttribute("text-anchor", "middle");
+            currentYearLabel.setAttribute("font-size", "11");
+            currentYearLabel.setAttribute("fill", "#e74c3c");
+            currentYearLabel.textContent = "Зараз";
+            g.appendChild(currentYearLabel);
+        }
 
         // Створюємо вісь X
         const xAxis = document.createElementNS("http://www.w3.org/2000/svg", "g");
@@ -465,42 +446,9 @@ document.addEventListener("DOMContentLoaded", function () {
         currentValueSpan.textContent = `${Math.round(results.currentValue).toLocaleString()} $`; // Поточна вартість
         totalDepreciationSpan.textContent = `${Math.round(results.totalDepreciation).toLocaleString()} $`; // Загальна амортизація
         yearlyDepreciationSpan.textContent = `${Math.round(results.yearlyDepreciation).toLocaleString()} $`; // Річна амортизація
-        costPerKmSpan.textContent = `${results.costPerKm.toFixed(2)} $`; // Вартість на км
 
         // Генеруємо графік на основі розрахованих даних
-        generateDepreciationChart(parseFloat(initialPriceInput.value), results.depreciationRate);
-    }
-
-    // Обробник кліку на прикладі з таблиці
-    function handleExampleClick(event) {
-        const row = event.target.closest("tr"); // Знаходимо рядок, на який клікнули
-        if (row) {
-            const cells = row.querySelectorAll("td"); // Отримуємо всі комірки рядка
-
-            // Шукаємо марку в випадаючому списку
-            const brandOption = Array.from(carBrandSelect.options).find(option => option.text === cells[0].textContent);
-            if (brandOption) {
-                carBrandSelect.value = brandOption.value; // Встановлюємо марку
-                populateModels(brandOption.value); // Заповнюємо моделі для цієї марки
-
-                // Шукаємо модель у випадаючому списку
-                setTimeout(() => {
-                    const modelOption = Array.from(carModelSelect.options).find(option => option.text === cells[1].textContent);
-                    if (modelOption) {
-                        carModelSelect.value = modelOption.value; // Встановлюємо модель
-                    }
-
-                    // Встановлюємо інші значення форми з прикладу
-                    yearInput.value = cells[2].textContent; // Рік
-                    mileageInput.value = cells[3].textContent.replace(/,/g, ""); // Пробіг (видаляємо коми)
-                    initialPriceInput.value = cells[4].textContent.replace(/,/g, ""); // Початкова вартість (видаляємо коми)
-
-                    // Запускаємо розрахунок
-                    const results = calculateDepreciation();
-                    displayResults(results);
-                }, 100); // Невелика затримка для завершення заповнення моделей
-            }
-        }
+        generateDepreciationChart(results);
     }
 
     // Функція скидання калькулятора
@@ -512,15 +460,14 @@ document.addEventListener("DOMContentLoaded", function () {
         carModelSelect.innerHTML = '<option value="">Оберіть модель</option>'; // Очищаємо список моделей
 
         // Очищаємо поля введення
-        yearInput.value = '';
-        mileageInput.value = '';
-        initialPriceInput.value = '';
+        purchaseYearInput.value = '';
+        purchasePriceInput.value = '';
+        depreciationPeriodInput.value = '';
 
         // Скидаємо значення результатів
         currentValueSpan.textContent = "- $";
         totalDepreciationSpan.textContent = "- $";
         yearlyDepreciationSpan.textContent = "- $";
-        costPerKmSpan.textContent = "- $";
 
         // Видаляємо активний клас з контейнера результатів
         resultsContainer.classList.remove('active');
@@ -552,9 +499,6 @@ document.addEventListener("DOMContentLoaded", function () {
             displayResults(results); // Відображаємо результати
         }
     });
-
-    // Обробник кліків на таблиці прикладів
-    document.getElementById("example-table-body").addEventListener("click", handleExampleClick);
 
     // Обробник кнопки скидання
     if (resetBtn) {
